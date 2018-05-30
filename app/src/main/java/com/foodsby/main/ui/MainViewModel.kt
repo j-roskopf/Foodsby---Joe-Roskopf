@@ -3,7 +3,6 @@ package com.foodsby.main.ui
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import android.widget.RadioButton
 import com.foodsby.R
 import com.foodsby.android.extensions.currentDay
@@ -42,14 +41,12 @@ class MainViewModel @Inject constructor(private val deliveriesApi: DeliveriesApi
             radioButton.text = abbreviationFromDay(currentDay)
         }
         radioButton.id = idFromDay(currentDay)
-        Log.d("D","responseDebug - setting id of day ${radioButton.text} ${radioButton.id}")
         return radioButton
     }
 
     fun currentDayFromDropOff(dropoff: Dropoff): String {
         return dropoff.day ?: "?"
     }
-
 
 
     /**

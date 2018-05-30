@@ -3,12 +3,15 @@ package com.foodsby
 import android.app.Activity
 import android.app.Application
 import android.support.v4.app.Fragment
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.foodsby.di.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
+
+
 
 class FoodsbyApplication : Application(), HasActivityInjector, HasSupportFragmentInjector {
     @Inject
@@ -17,6 +20,8 @@ class FoodsbyApplication : Application(), HasActivityInjector, HasSupportFragmen
 
     override fun onCreate() {
         super.onCreate()
+
+        Fresco.initialize(this)
 
         DaggerAppComponent
                 .builder()

@@ -19,10 +19,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
-
 class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var mainViewModel: MainViewModel
+
+    lateinit var deliveriesAdapter: DeliveriesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -47,15 +48,26 @@ class MainActivity : AppCompatActivity() {
 
             verifySelectedDayIsVisible(group.findViewById(id))
 
-            Log.d("D","responseDebug - check changed! $id")
+            mainRecyclerView.adapter?.notifyItemRangeRemoved(0, mainRecyclerView.adapter.itemCount)
+
             val data = mainViewModel.deliveryResponse.value?.dropoffs
             data?.let {
                 for(dropOff in it) {
                     if(mainViewModel.idFromDay(mainViewModel.currentDayFromDropOff(dropOff)) == id) {
-                        setAdapter(dropOff.deliveries)
+                        if(mainRecyclerView.adapter == null) {
+                            setAdapter(dropOff.deliveries)
+                        } else {
+                            updateAdapter(dropOff.deliveries)
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private fun updateAdapter(deliveries: List<Delivery>?) {
+        deliveries?.let {
+            deliveriesAdapter.update(it)
         }
     }
 
@@ -63,7 +75,8 @@ class MainActivity : AppCompatActivity() {
         deliveries?.let {
             // Creates a vertical Layout Manager
             mainRecyclerView.layoutManager = LinearLayoutManager(this)
-            mainRecyclerView.adapter = DeliveriesAdapter(context = this, deliveries = it)
+            deliveriesAdapter = DeliveriesAdapter(context = this, deliveries = it)
+            mainRecyclerView.adapter = deliveriesAdapter
         }
     }
 
@@ -97,12 +110,14 @@ class MainActivity : AppCompatActivity() {
         response.dropoffs?.let {
             var selectedRadioButton: RadioButton? = null
             for(dropOff in it) {
-                val radioButton = mainViewModel.createRadioButtonFromDropOff(dropOff, this)
-                mainSegmentedGroup.addView(radioButton)
-                if(radioButton.text == "Today") {
-                    selectedRadioButton = radioButton
-                    Log.d("D","responseDebug - radio button text of today " + mainViewModel.currentDayFromDropOff(dropOff).hashCode())
-                    mainSegmentedGroup.check(mainViewModel.idFromDay(mainViewModel.currentDayFromDropOff(dropOff)))
+                if(dropOff.deliveries?.isNotEmpty() == true) {
+                    val radioButton = mainViewModel.createRadioButtonFromDropOff(dropOff, this)
+                    mainSegmentedGroup.addView(radioButton)
+                    if(radioButton.text == "Today") {
+                        selectedRadioButton = radioButton
+                        Log.d("D","responseDebug - radio button text of today " + mainViewModel.currentDayFromDropOff(dropOff).hashCode())
+                        mainSegmentedGroup.check(mainViewModel.idFromDay(mainViewModel.currentDayFromDropOff(dropOff)))
+                    }
                 }
             }
 

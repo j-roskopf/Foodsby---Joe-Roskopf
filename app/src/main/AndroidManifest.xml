@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.foodsby">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".FoodsbyApplication"
         android:allowBackup="true"

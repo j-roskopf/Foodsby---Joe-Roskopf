@@ -4,20 +4,18 @@ import android.graphics.Rect
 import android.view.View
 import android.widget.HorizontalScrollView
 
-fun HorizontalScrollView.isViewVisible(view: View): Boolean {
-    val scrollBounds = Rect()
-    getDrawingRect(scrollBounds)
+fun HorizontalScrollView.isViewVisible(view: View, rect: Rect): Boolean {
+    getDrawingRect(rect)
 
     val left = view.x
     val right = left + view.width
 
-    return scrollBounds.left <= left && scrollBounds.right >= right
+    return rect.left <= left && rect.right >= right
 }
 
-fun HorizontalScrollView.directionFromViewOffset(view: View): Int {
-    val scrollBounds = Rect()
-    getDrawingRect(scrollBounds)
-    return if(view.x <= scrollBounds.left) {
+fun HorizontalScrollView.directionFromViewOffset(view: View, rect: Rect): Int {
+    getDrawingRect(rect)
+    return if(view.x <= rect.left) {
         View.FOCUS_LEFT
     } else {
         View.FOCUS_RIGHT

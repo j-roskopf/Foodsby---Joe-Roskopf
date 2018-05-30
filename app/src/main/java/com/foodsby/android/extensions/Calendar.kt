@@ -1,12 +1,9 @@
 package com.foodsby.android.extensions
 
 import java.util.*
-import java.util.Calendar.getInstance
 
-fun Calendar.currentDay(): String {
-    val calendar = getInstance()
-    val day = calendar.get(Calendar.DAY_OF_WEEK)
-    return when (day) {
+fun Calendar.currentDay(dayOfWeek: Int): String {
+    return when (dayOfWeek) {
         Calendar.SUNDAY -> "Sunday"
         Calendar.MONDAY -> "Monday"
         Calendar.TUESDAY -> "Tuesday"

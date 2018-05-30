@@ -2,6 +2,7 @@ package com.foodsby.main.ui
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.Observer
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -95,9 +96,8 @@ class MainActivity : AppCompatActivity() {
     private fun verifySelectedDayIsVisible(view: View?) {
         view?.let {
             mainScrollView.post {
-                Log.d("D","visibleDebug - is view visible? ${mainScrollView.isViewVisible(it)}")
-                if(!mainScrollView.isViewVisible(it)) {
-                    mainScrollView.fullScroll(mainScrollView.directionFromViewOffset(it))
+                if(!mainScrollView.isViewVisible(it, Rect())) {
+                    mainScrollView.fullScroll(mainScrollView.directionFromViewOffset(it, Rect()))
                 }
             }
         }

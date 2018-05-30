@@ -35,7 +35,7 @@ class MainViewModel @Inject constructor(private val deliveriesApi: DeliveriesApi
 
         val currentDay = currentDayFromDropOff(dropoff)
 
-        if(currentDay == Calendar.getInstance().currentDay()) {
+        if(currentDay == Calendar.getInstance().currentDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))) {
             radioButton.text = "Today"
         } else {
             radioButton.text = abbreviationFromDay(currentDay)

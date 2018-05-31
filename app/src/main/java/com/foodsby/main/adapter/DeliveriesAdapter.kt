@@ -27,21 +27,33 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val dropoff = deliveries[position]
+        val delivery = deliveries[position]
 
-        holder.deliveryItemRestaurantName.text = dropoff.restaurantName
-        holder.deliveryItemOrderByTime.text = dropoff.cutoff
-        holder.deliveryItemDeliveryTime.text = dropoff.dropoff
-        holder.deliveryItemRestaurantImage.setImageURI(Uri.parse(dropoff.logoUrl))
+        holder.deliveryItemRestaurantName.text = delivery.restaurantName
+        holder.deliveryItemOrderByTime.text = delivery.cutoff
+        holder.deliveryItemDeliveryTime.text = delivery.dropoff
+        holder.deliveryItemRestaurantImage.setImageURI(Uri.parse(delivery.logoUrl))
 
-        holder.deliveryItemStatusImage.setImageDrawable(ContextCompat.getDrawable(context, getImageFromDropOff(dropoff)))
+        holder.deliveryItemStatusImage.setImageDrawable(ContextCompat.getDrawable(context, getImageFromDelivery(delivery)))
+
+        setupExpansionLogic(position, holder, delivery)
+    }
+
+    /**
+     * Handles the logic to expand a cell when clicked or handle the onClick of the cell in another way
+     *
+     * @param position - current position in our adapter
+     * @param holder - the current [ViewHolder] expanded for this position
+     * @param delivery - the delivery to display
+     */
+    private fun setupExpansionLogic(position: Int, holder: ViewHolder, delivery: Delivery) {
 
         val isExpanded = position == expandedPosition
         holder.deliveryItemDeliveryStatus.visibility = if (isExpanded) View.VISIBLE else View.GONE
 
-        if(canBeExpanded(dropoff)) {
-            holder.deliveryItemDeliveryStatus.text = getStatusFromDropOff(dropoff)
-            holder.deliveryItemDeliveryStatus.setBackgroundColor(ContextCompat.getColor(context, getBackgroundColorFromDropOff(dropoff)))
+        if(canBeExpanded(delivery)) {
+            holder.deliveryItemDeliveryStatus.text = context.getString(getStatusFromDelivery(delivery))
+            holder.deliveryItemDeliveryStatus.setBackgroundColor(ContextCompat.getColor(context, getBackgroundColorFromDelivery(delivery)))
 
             holder.itemView.isActivated = isExpanded
 
@@ -56,29 +68,44 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
             }
         } else {
             holder.itemView.setOnClickListener {
-                Snackbar.make(it, "Order placed!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(it, context.getString(R.string.delivery_item_order_placed), Snackbar.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun canBeExpanded(dropOff: Delivery): Boolean {
+    /**
+     * Not all items can be expanded. If it is sold out, selling out, past cut off, or already placed,
+     * the row item can be expanded, otherwise it cannot
+     *
+     * @param delivery - the delivery to check
+     *
+     * @return Boolean representing whether or not the row item can be expanded
+     */
+    fun canBeExpanded(delivery: Delivery): Boolean {
         return when {
-            dropOff.soldOut == true -> true
-            dropOff.isOrderPlaced == true -> true
-            dropOff.isPastCutoff == true -> true
-            dropOff.sellingOut == true -> true
+            delivery.soldOut == true -> true
+            delivery.isOrderPlaced == true -> true
+            delivery.isPastCutoff == true -> true
+            delivery.sellingOut == true -> true
             else -> {
                 false
             }
         }
     }
 
-    private fun getBackgroundColorFromDropOff(dropOff: Delivery): Int {
+    /**
+     * Get the background color for our status text based on the delivery
+     *
+     * @param delivery - the delivery to check
+     *
+     * @return Int color resource
+     */
+    fun getBackgroundColorFromDelivery(delivery: Delivery): Int {
         return when {
-            dropOff.soldOut == true -> R.color.material_red_500
-            dropOff.isOrderPlaced == true -> R.color.material_green_500
-            dropOff.isPastCutoff == true -> R.color.material_red_500
-            dropOff.sellingOut == true -> R.color.material_yellow_500
+            delivery.soldOut == true -> R.color.material_red_500
+            delivery.isOrderPlaced == true -> R.color.material_green_500
+            delivery.isPastCutoff == true -> R.color.material_red_500
+            delivery.sellingOut == true -> R.color.material_yellow_500
             else -> {
                 android.R.color.white
             }
@@ -86,12 +113,19 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
     }
 
 
-    private fun getImageFromDropOff(dropOff: Delivery): Int {
+    /**
+     * Gets image to display in the row item based on the [Delivery]
+     *
+     * @param delivery - the delivery to check
+     *
+     * @return - Drawable resource based on the passed in delievery
+     */
+    fun getImageFromDelivery(delivery: Delivery): Int {
         return when {
-            dropOff.soldOut == true -> R.drawable.ic_sentiment_dissatisfied_red_500_24dp
-            dropOff.isOrderPlaced == true -> R.drawable.ic_check_circle_green_500_24dp
-            dropOff.isPastCutoff == true -> R.drawable.ic_timer_off_red_500_24dp
-            dropOff.sellingOut == true -> R.drawable.ic_warning_yellow_500_24dp
+            delivery.soldOut == true -> R.drawable.ic_sentiment_dissatisfied_red_500_24dp
+            delivery.isOrderPlaced == true -> R.drawable.ic_check_circle_green_500_24dp
+            delivery.isPastCutoff == true -> R.drawable.ic_timer_off_red_500_24dp
+            delivery.sellingOut == true -> R.drawable.ic_warning_yellow_500_24dp
             else -> {
                 android.R.drawable.screen_background_dark_transparent
             }
@@ -99,21 +133,40 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
     }
 
 
-    private fun getStatusFromDropOff(dropoff: Delivery): String {
+    /**
+     * Based on the [Delivery], return an appropriate String resource
+     *
+     * @param delivery - the [Delivery] in question
+     *
+     * @return - Int representing the String resource to display in the row item
+     */
+    fun getStatusFromDelivery(delivery: Delivery): Int {
         return when {
-            dropoff.isPastCutoff == true -> "Cut-Off Time Passed"
-            dropoff.isOrderPlaced == true -> "Order is placed!"
-            dropoff.soldOut == true ->"Order is sold out!"
-            dropoff.sellingOut == true -> "Order is selling out, hurry!"
-            else -> "Place your order!"
+            delivery.isPastCutoff == true -> R.string.delivery_item_past_cut_off
+            delivery.isOrderPlaced == true -> R.string.delivery_item_order_placed
+            delivery.soldOut == true -> R.string.delivery_item_sold_out
+            delivery.sellingOut == true -> R.string.delivery_item_selling_out
+            else -> -1
         }
     }
 
-    // Gets the number of deliveries in the list
+    /**
+     * Gets the number of deliveries in the list
+     *
+     * @return - Int describing the number of deliveries in our list
+     */
     override fun getItemCount(): Int {
         return deliveries.size
     }
 
+    /**
+     * Updates the list via DiffUtil.
+     *
+     * This method is also responsible for resetting our placeholder for the expanded position
+     * and the previously expanded position
+     *
+     * @param newDeliveries - the new deliveries to update the list with
+     */
     fun update(newDeliveries: List<Delivery>) {
         expandedPosition = -1
         previousExpandedPosition = -1
@@ -127,6 +180,9 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
     }
 }
 
+/**
+ * View holder class describing our [Delivery] row item
+ */
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val deliveryItemRestaurantName = view.deliveryItemRestaurantName as TextView
     val deliveryItemRestaurantImage = view.deliveryItemRestaurantImage as ImageView

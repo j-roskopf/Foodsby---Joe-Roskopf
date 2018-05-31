@@ -33,9 +33,20 @@ class MainViewModel @Inject constructor(private val deliveriesApi: DeliveriesApi
 
     @SuppressLint("InflateParams")
     fun createRadioButtonFromDropOff(dropoff: Dropoff, activity: Activity): RadioButton {
-        val radioButton = activity.layoutInflater.inflate(R.layout.radio_button, null) as RadioButton
+        var radioButton = activity.layoutInflater.inflate(R.layout.radio_button, null) as RadioButton
+        radioButton = populateRadioButton(dropoff, radioButton, activity)
+        return radioButton
+    }
 
-        val currentDay = currentDayFromDropOff(dropoff)
+    /**
+     * Given a [RadioButton], a [Dropoff], and an [Activity], populate the radio button with the correct parameters
+     *
+     * @param radioButton - the RadioButton to populate
+     * @param dropOff - the Dropoff to get the day from
+     * @param activity - the Activity to get resources
+     */
+    fun populateRadioButton(dropOff: Dropoff, radioButton: RadioButton, activity: Activity): RadioButton {
+        val currentDay = currentDayFromDropOff(dropOff)
 
         if(currentDay == Calendar.getInstance().currentDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))) {
             radioButton.text = activity.getString(R.string.today_text)
@@ -46,6 +57,9 @@ class MainViewModel @Inject constructor(private val deliveriesApi: DeliveriesApi
         return radioButton
     }
 
+    /**
+     * Given a [Dropoff] return the day of that dropoff, otherwise a question mark
+     */
     fun currentDayFromDropOff(dropoff: Dropoff): String {
         return dropoff.day ?: "?"
     }
@@ -58,7 +72,7 @@ class MainViewModel @Inject constructor(private val deliveriesApi: DeliveriesApi
      *
      * @return the abbreviated day
      */
-    private fun abbreviationFromDay(day: String?): String {
+    fun abbreviationFromDay(day: String?): String {
         return when(day?.toUpperCase()) {
             "MONDAY" -> "Mon"
             "TUESDAY" -> "Tues"

@@ -6,7 +6,6 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import com.foodsby.R
@@ -66,12 +65,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Calls the necessary method inside our adapter to diff the contents of what's currently there
+     * and the parameter
+     *
+     * @param deliveries - the list of [Delivery] to update our adapter with
+     */
     private fun updateAdapter(deliveries: List<Delivery>?) {
         deliveries?.let {
             deliveriesAdapter.update(it)
         }
     }
 
+    /**
+     * Sets the adapter with the list of [Delivery]
+     *
+     * @param deliveries - the list to update our adapter with
+     */
     private fun setAdapter(deliveries: List<Delivery>?) {
         deliveries?.let {
             // Creates a vertical Layout Manager
@@ -93,6 +103,13 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Given the view representing which day is selected, checks to make sure that view is visible.
+     *
+     * If it is not, this method is also responsible for scrolling our HSV to verfiy it is
+     *
+     * @param view - the view to check
+     */
     private fun verifySelectedDayIsVisible(view: View?) {
         view?.let {
             mainScrollView.post {
@@ -104,18 +121,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     /*
-     * Parse the response from out data layer!
+     * Parse the response from out data layer and display
      */
     private fun parseResponse(response: DeliveryResponse) {
         response.dropoffs?.let {
             var selectedRadioButton: RadioButton? = null
             for(dropOff in it) {
                 if(dropOff.deliveries?.isNotEmpty() == true) {
+
                     val radioButton = mainViewModel.createRadioButtonFromDropOff(dropOff, this)
                     mainSegmentedGroup.addView(radioButton)
-                    if(radioButton.text == "Today") {
+
+                    if(radioButton.text == getString(R.string.today_text)) {
                         selectedRadioButton = radioButton
-                        Log.d("D","responseDebug - radio button text of today " + mainViewModel.currentDayFromDropOff(dropOff).hashCode())
                         mainSegmentedGroup.check(mainViewModel.idFromDay(mainViewModel.currentDayFromDropOff(dropOff)))
                     }
                 }

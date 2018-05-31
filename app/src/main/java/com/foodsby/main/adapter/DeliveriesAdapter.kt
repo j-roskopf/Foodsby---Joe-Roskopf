@@ -16,10 +16,6 @@ import com.foodsby.R
 import com.foodsby.model.network.Delivery
 import kotlinx.android.synthetic.main.delivery_row_item.view.*
 
-
-
-
-
 class DeliveriesAdapter(private var deliveries: List<Delivery>, private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
     private var expandedPosition = -1
@@ -27,6 +23,7 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
     private val progressBarDrawable = ProgressBarDrawable()
 
     init {
+        //style our progress bar accordingly
         progressBarDrawable.color = ContextCompat.getColor(context, R.color.colorAccent)
         progressBarDrawable.backgroundColor = ContextCompat.getColor(context, R.color.colorPrimary)
         progressBarDrawable.radius = context.resources.getDimensionPixelSize(R.dimen.drawee_hierarchy_progress_radius)
@@ -39,15 +36,19 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val delivery = deliveries[position]
 
-        holder.deliveryItemRestaurantImage.hierarchy.setProgressBarImage(progressBarDrawable);
+        //set the progress drawable on our image
+        holder.deliveryItemRestaurantImage.hierarchy.setProgressBarImage(progressBarDrawable)
 
+        //set delivery info
         holder.deliveryItemRestaurantName.text = delivery.restaurantName
         holder.deliveryItemOrderByTime.text = delivery.cutoff
         holder.deliveryItemDeliveryTime.text = delivery.dropoff
         holder.deliveryItemRestaurantImage.setImageURI(delivery.logoUrl)
 
+        //set the image to be the restaurant's logo
         holder.deliveryItemStatusImage.setImageDrawable(ContextCompat.getDrawable(context, getImageFromDelivery(delivery)))
 
+        //handle on click for item
         setupExpansionLogic(position, holder, delivery)
     }
 
@@ -63,6 +64,8 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
         val isExpanded = position == expandedPosition
         holder.deliveryItemDeliveryStatus.visibility = if (isExpanded) View.VISIBLE else View.GONE
 
+        //if the view can be expanded (meaning it's not sold out, or past the cut off etc.)
+        //allow the onclick to expand the item
         if(canBeExpanded(delivery)) {
             holder.deliveryItemDeliveryStatus.text = context.getString(getStatusFromDelivery(delivery))
             holder.deliveryItemDeliveryStatus.setBackgroundColor(ContextCompat.getColor(context, getBackgroundColorFromDelivery(delivery)))
@@ -79,6 +82,7 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
                 notifyItemChanged(position)
             }
         } else {
+            //otherwise, handle it the way a delivery would be handled
             holder.itemView.setOnClickListener {
                 Snackbar.make(it, context.getString(R.string.delivery_item_order_placed), Snackbar.LENGTH_SHORT).show()
             }

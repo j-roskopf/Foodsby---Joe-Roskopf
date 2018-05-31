@@ -3,7 +3,11 @@ package com.foodsby.main.adapter
 import android.support.v7.util.DiffUtil
 import com.foodsby.model.network.Delivery
 
-
+/**
+ * DiffUtilCallback class.
+ *
+ * Handles doing the diff between 2 list of [Delivery] objects
+ */
 class DiffUtilCallback(private var newDropOff: List<Delivery>, private var oldDropOff: List<Delivery>) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {

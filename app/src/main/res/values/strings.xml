@@ -1,7 +1,18 @@
 <resources>
     <string name="app_name">Foodsby</string>
+
+    <!--Main UI -->
     <string name="delivery_item_past_cut_off">Cut-Off Time Passed</string>
     <string name="delivery_item_order_placed">Order is placed!</string>
     <string name="delivery_item_sold_out">Order is sold out!</string>
     <string name="delivery_item_selling_out">Order is selling out, hurry!</string>
+    <string name="order_by">Order By:</string>
+    <string name="delivery_time">Delivery Time:</string>
+
+    <!-- Content Descriptions -->
+    <string name="content_description_restaurant_image">Restaurant Image</string>
+    <string name="content_description_location_icon">Location Icon</string>
+    <string name="main_location_primary">5700 Boradmoor - Mission Towers</string>
+    <string name="main_location_secondary">5700 Boradmoor Street, Mission KS</string>
+    <string name="today_text">Today</string>
 </resources>

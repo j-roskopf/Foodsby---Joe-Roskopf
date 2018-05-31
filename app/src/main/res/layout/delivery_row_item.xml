@@ -26,6 +26,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:textColor="@color/material_red_500"
+        android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/deliveryItemRestaurantImage"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Restaurant Name" />
@@ -51,7 +53,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Order By:"
+        android:text="@string/order_by"
         app:layout_constraintStart_toEndOf="@+id/deliveryItemRestaurantImage"
         app:layout_constraintTop_toBottomOf="@+id/deliveryItemRestaurantName" />
 
@@ -62,7 +64,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Delivery Time"
+        android:text="@string/delivery_time"
         app:layout_constraintStart_toEndOf="@+id/deliveryItemRestaurantImage"
         app:layout_constraintTop_toBottomOf="@+id/deliveryItemOrderByText" />
 
@@ -70,10 +72,11 @@
         android:id="@+id/deliveryItemOrderByTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/deliveryItemOrderByText"
+        android:layout_marginBottom="8dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/deliveryItemDeliveryTime"
+        app:layout_constraintStart_toStartOf="@+id/deliveryItemDeliveryTime"
         tools:text="10:00 AM" />
 
     <android.support.constraint.Guideline
@@ -89,9 +92,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="TextView"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/deliveryItemDeliveryTimeText" />
+        app:layout_constraintTop_toTopOf="@+id/deliveryItemDeliveryTimeText"
+        tools:text="11:00 AM" />
 
     <TextView
         android:id="@+id/deliveryItemDeliveryStatus"
@@ -113,14 +118,18 @@
         tools:visibility="visible" />
 
     <ImageView
+        android:contentDescription="@string/content_description_restaurant_image"
         android:id="@+id/deliveryItemStatusImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/deliveryItemDeliveryStatus"
         app:layout_constraintStart_toEndOf="@+id/deliveryItemRestaurantImage"
+        app:layout_constraintTop_toBottomOf="@+id/deliveryItemDeliveryTimeText"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/ic_warning_yellow_500_24dp" />
 
 </android.support.constraint.ConstraintLayout>

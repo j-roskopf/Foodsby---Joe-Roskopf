@@ -13,9 +13,9 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class DeliveriesAdapterTests {
 
-    lateinit var delivery: Delivery
-    lateinit var context: Context
-    lateinit var adapter: DeliveriesAdapter
+    private lateinit var delivery: Delivery
+    private lateinit var context: Context
+    private lateinit var adapter: DeliveriesAdapter
 
     @Before
     fun setup() {

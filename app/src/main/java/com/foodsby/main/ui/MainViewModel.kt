@@ -1,5 +1,6 @@
 package com.foodsby.main.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -30,13 +31,14 @@ class MainViewModel @Inject constructor(private val deliveriesApi: DeliveriesApi
         }
     }
 
+    @SuppressLint("InflateParams")
     fun createRadioButtonFromDropOff(dropoff: Dropoff, activity: Activity): RadioButton {
         val radioButton = activity.layoutInflater.inflate(R.layout.radio_button, null) as RadioButton
 
         val currentDay = currentDayFromDropOff(dropoff)
 
         if(currentDay == Calendar.getInstance().currentDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))) {
-            radioButton.text = "Today"
+            radioButton.text = activity.getString(R.string.today_text)
         } else {
             radioButton.text = abbreviationFromDay(currentDay)
         }

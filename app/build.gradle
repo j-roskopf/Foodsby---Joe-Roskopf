@@ -45,7 +45,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    def androidSupportVersion = "26.1.0"
+    def androidSupportVersion = "27.1.1"
     implementation "com.android.support:appcompat-v7:$androidSupportVersion"
     implementation "com.android.support:recyclerview-v7:$androidSupportVersion"
     implementation "com.android.support:design:$androidSupportVersion"
@@ -93,4 +93,12 @@ dependencies {
     testImplementation("com.nhaarman:mockito-kotlin:$mockitoKotlinVersion") {
         exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib"
     }
+
+    def junitVersion = "4.12"
+    def runnerVersion = "1.0.2"
+    def espressoVersion = "3.0.2"
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "com.android.support.test:runner:$runnerVersion"
+    androidTestImplementation "com.android.support.test:rules:$runnerVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
 }

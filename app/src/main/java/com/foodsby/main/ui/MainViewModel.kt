@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(private val deliveriesApi: DeliveriesApi
      */
     fun fetchDeliveries() {
         async {
-            deliveryResponse.postValue(deliveriesApi.getDeliveries())
+            deliveryResponse.postValue(deliveriesApi.getDeliveries(deliveriesApi.getInputStream()))
         }
     }
 

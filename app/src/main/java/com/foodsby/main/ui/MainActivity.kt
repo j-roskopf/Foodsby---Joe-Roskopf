@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var mainViewModel: MainViewModel
 
-    lateinit var deliveriesAdapter: DeliveriesAdapter
+    private lateinit var deliveriesAdapter: DeliveriesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

@@ -1,7 +1,6 @@
 package com.foodsby.main.adapter
 
 import android.content.Context
-import android.net.Uri
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.util.DiffUtil
@@ -11,9 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.facebook.drawee.drawable.ProgressBarDrawable
+import com.facebook.drawee.view.SimpleDraweeView
 import com.foodsby.R
 import com.foodsby.model.network.Delivery
 import kotlinx.android.synthetic.main.delivery_row_item.view.*
+
+
 
 
 
@@ -21,6 +24,13 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
 
     private var expandedPosition = -1
     private var previousExpandedPosition  = -1
+    private val progressBarDrawable = ProgressBarDrawable()
+
+    init {
+        progressBarDrawable.color = ContextCompat.getColor(context, R.color.colorAccent)
+        progressBarDrawable.backgroundColor = ContextCompat.getColor(context, R.color.colorPrimary)
+        progressBarDrawable.radius = context.resources.getDimensionPixelSize(R.dimen.drawee_hierarchy_progress_radius)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.delivery_row_item, parent, false))
@@ -29,10 +39,12 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val delivery = deliveries[position]
 
+        holder.deliveryItemRestaurantImage.hierarchy.setProgressBarImage(progressBarDrawable);
+
         holder.deliveryItemRestaurantName.text = delivery.restaurantName
         holder.deliveryItemOrderByTime.text = delivery.cutoff
         holder.deliveryItemDeliveryTime.text = delivery.dropoff
-        holder.deliveryItemRestaurantImage.setImageURI(Uri.parse(delivery.logoUrl))
+        holder.deliveryItemRestaurantImage.setImageURI(delivery.logoUrl)
 
         holder.deliveryItemStatusImage.setImageDrawable(ContextCompat.getDrawable(context, getImageFromDelivery(delivery)))
 
@@ -185,7 +197,7 @@ class DeliveriesAdapter(private var deliveries: List<Delivery>, private val cont
  */
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val deliveryItemRestaurantName = view.deliveryItemRestaurantName as TextView
-    val deliveryItemRestaurantImage = view.deliveryItemRestaurantImage as ImageView
+    val deliveryItemRestaurantImage = view.deliveryItemRestaurantImage as SimpleDraweeView
     val deliveryItemStatusImage = view.deliveryItemStatusImage as ImageView
     val deliveryItemOrderByTime = view.deliveryItemOrderByTime as TextView
     val deliveryItemDeliveryTime = view.deliveryItemDeliveryTime as TextView
